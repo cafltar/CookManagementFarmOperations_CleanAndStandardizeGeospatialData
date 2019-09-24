@@ -50,7 +50,7 @@ cw_gp = (geopandas.read_file(cw_gp_path)
 
 #%% Create data dictionaries
 data_dictionary_columns = ["FieldName", "Units", "Description", "DataType"]
-gp_data_dictionary = pd.DataFrame(
+boundary_data_dictionary = pd.DataFrame(
     data = [
         ["Id", 
         "unitless", 
@@ -59,7 +59,7 @@ gp_data_dictionary = pd.DataFrame(
     ],
     columns = data_dictionary_columns
 )
-boundary_data_dictionary = pd.DataFrame(
+gp_data_dictionary = pd.DataFrame(
     data = [
         ["ID2",
         "unitless",
