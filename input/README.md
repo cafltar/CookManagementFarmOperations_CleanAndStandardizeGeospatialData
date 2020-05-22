@@ -21,3 +21,13 @@
 
 * [CookEast_GeoReferencePoints_2016_IL](CookEast_GeoReferencePoints_2016_IL)
   * Unzipped from CookEast_GeoReferencePoints_2016_IL.zip
+
+## 05/22/2020
+
+* [CE_WGS1984_2016_OperationalFieldBoundaries](CE_WGS1984_2016_OperationalFieldBoundaries)
+  * From Dev project DMWG_StandardLtarGisDataFiles (github: <https://github.com/cafltar/DMWG_StandardLtarGisDataFiles/tree/master/input/FromIanLeslie_CafGeospatial/CE_CW_WGS1984>) originally from Ian Leslie
+  * Contains C01 and C02 boundaries for HY2016. In WGS1984.
+
+* [20200408_CookEastFertZones](20200408_CookEastFertZones)
+  * From Ian Leslie via email "RE: Fert data" on 04/08/2020
+  * "I’m sending the shape files along for the different fertilizer zones for 2017 and 2019 while its still on my radar"
