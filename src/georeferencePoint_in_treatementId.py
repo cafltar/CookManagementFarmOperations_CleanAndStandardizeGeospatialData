@@ -63,6 +63,9 @@ ce_1999To2016 = (pointInPolys
     .assign(EndYear = 2015)
     .drop(["geometry", "STRIP", "FIELD", "index_right", "Strip", "Field"], axis = 1))
 
+# Reassign TreatmentIds at Field C; some treatments in Field C were split between two strips due to smaller area of the strips relative to those in Field A and Field B
+ce_1999To2016.loc[(ce_1999To2016["TreatmentId"] == "C8"), "TreatmentId"] = "C5"
+ce_1999To2016.loc[(ce_1999To2016["TreatmentId"] == "C7"), "TreatmentId"] = "C6"
 
 # %%
 points_in_treatment = pd.DataFrame(ce_1999To2016).to_csv("foo.csv", index = False)
@@ -99,10 +102,13 @@ date = datetime.datetime.now().strftime("%Y%m%d")
 OUT_PATH = Path.cwd() / "output"
 OUT_PATH.mkdir(parents = True, exist_ok = True)
 
-pd.DataFrame(ce_1999To2016).to_csv(
+pd.DataFrame(ce_1999To2016).sort_values(by = ["ID2"]).to_csv(
     Path(OUT_PATH / "georeferencepoint_treatments_cookeast_1999-2016_{}.csv".format(date)),
     index = False)
 
 georef_treatment_data_dictionary.to_csv(
     Path(OUT_PATH / "georeferencepoint_treatments_cookeast_1999-2016_Dictionary_{}.csv".format(date)),
     index = False)
+
+
+# %%
