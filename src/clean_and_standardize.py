@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import datetime
 
-#%% Setup paths
+# Setup paths
 INPUT_PATH = Path.cwd() / "input"
 
 # Paths to field boundaries
@@ -15,7 +15,7 @@ cw_boundary_path = INPUT_PATH / "FromIanLeslie_CafGeospatial" / "CE_CW_WGS1984" 
 ce_gp_path = INPUT_PATH / "CookEast_GeoReferencePoints_2016_IL" / "All_CookEast.shp"
 cw_gp_path = INPUT_PATH / "FromIanLeslie_CafGeospatial" / "CE_CW_WGS1984" / "CookWestGeoRefPointsWGS1984" / "CookWestGeoRefPoints_WGS1984.shp"
 
-#%% Clean and standardize boundaries
+# Clean and standardize boundaries
 
 ce_boundary = (geopandas.read_file(ce_boundary_path)
     .to_crs({"init": "epsg:4326"})
@@ -30,7 +30,7 @@ cw_boundary = (geopandas.read_file(cw_boundary_path)
         axis = 1)
     .assign(Id = "CW"))
 
-#%% Clean and standardize georeference points
+# Clean and standardize georeference points
 
 ce_gp_utm_11n = geopandas.read_file(ce_gp_path)
 ce_gp_utm_11n.crs = {"init": "epsg:26911"}
@@ -48,7 +48,7 @@ cw_gp = (geopandas.read_file(cw_gp_path)
         ["POINT_X", "POINT_Y"],
         axis = 1))
 
-#%% Create data dictionaries
+# Create data dictionaries
 data_dictionary_columns = ["FieldName", "Units", "Description", "DataType"]
 boundary_data_dictionary = pd.DataFrame(
     data = [
@@ -69,7 +69,7 @@ gp_data_dictionary = pd.DataFrame(
     columns = data_dictionary_columns
 )
 
-#%% Output files
+# Output files
 
 date = datetime.datetime.now().strftime("%Y%m%d")
 

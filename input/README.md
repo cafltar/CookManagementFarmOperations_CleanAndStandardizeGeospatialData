@@ -31,3 +31,8 @@
 * [20200408_CookEastFertZones](20200408_CookEastFertZones)
   * From Ian Leslie via email "RE: Fert data" on 04/08/2020
   * "I’m sending the shape files along for the different fertilizer zones for 2017 and 2019 while its still on my radar"
+
+## 03/07/2025
+
+- [20250307CookEastFertZonesFromDataStream](20250307CookEastFertZonesFromDataStream)
+  - Data from `G:\Shared drives\CookManagementFarmOperations\DataStream\CookEastFertilizationZone` and extracted here on 2025-03-07
