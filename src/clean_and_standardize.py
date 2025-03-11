@@ -63,7 +63,7 @@ gp_data_dictionary = pd.DataFrame(
     data = [
         ["ID2",
         "unitless",
-        "Numeric value used to identify georeferenced points for long-term sample collection. Values are unique among both Cook fields (CE and CW). Use 'ID2' instead of 'Id' for historic reasons.",
+        "Numeric value used to identify georeferenced points for long-term sample collection. Values are unique among both Cook fields (CE and CW). Use of 'ID2' instead of 'Id' for historic reasons.",
         "Int"]
     ],
     columns = data_dictionary_columns

@@ -34,10 +34,10 @@ def main():
 
     # CE Gridpoints
     ce_gp_utm_11n = geopandas.read_file(ce_gp_path)
-    ce_gp_utm_11n.crs = {"init": "epsg:26911"}
+    ce_gp_utm_11n.crs = "EPSG:26911"
 
     ce_gp = (ce_gp_utm_11n
-        .to_crs({"init": "epsg:4326"})
+        .to_crs("EPSG:4326")
         .drop(
             ["FID_1", "COLUMN", "ROW", "ROW2", "COL_ROW", "COL_ROW2", 
             "EASTING", "NORTHING", "CROP", "AREA", 
@@ -99,11 +99,11 @@ def main():
             "Int"],
             ["PlotId",
             "unitless",
-            "String designation used to identify the plot (field + strip) that the georeference point was located within for the given timespan between start and end year",
+            "String designation used to identify the plot, a rough designation indicating common management practices (loosly an experimental unit), that the georeference point was located within for the given timespan between start and end year",
             "String"],
             ["TreatmentId",
             "unitless",
-            "String designation used to identify the treatment that the georeference point was located within for the given timespan between start and end year. TreatmentId differs from PlotId because some treatments in Field C were split between two strips due to smaller area of the strips relative to those in Field A and Field B",
+            "String designation used to identify the treatment that the georeference point was located within for the given timespan between start and end year. TreatmentId differs from PlotId between 1999-2015 because some treatments in Field C were split between two strips due to smaller area of the strips relative to those in Field A and Field B",
             "String"],
             ["StartYear",
             "unitless",
@@ -135,10 +135,10 @@ def main():
 def process_1999To2015(treatment_path, grid_points):
     # CE strips
     ce_tx_1999To2015_utm_11n = geopandas.read_file(treatment_path)
-    ce_tx_1999To2015_utm_11n.crs = {"init": "epsg:26911"}
+    ce_tx_1999To2015_utm_11n.crs = "EPSG:26911"
 
     ce_tx_1999To2015 = (ce_tx_1999To2015_utm_11n
-        .to_crs({"init": "epsg:4326"})
+        .to_crs("4326")
         .drop(
             ["Crop", "Area", "Perimeter", "Area_ac", "Ind_Field"],
             axis = 1))
@@ -168,7 +168,7 @@ def process_1999To2015(treatment_path, grid_points):
 def process_2016_C01(treatment_path, grid_points):
     # CE strips    
     ce_tx_2016 = geopandas.read_file(treatment_path)
-    ce_tx_2016.crs = {"init": "epsg:4326"}
+    ce_tx_2016.crs = "EPSG:4326"
     
     pointInPolys = sjoin(grid_points, ce_tx_2016, how="left")
 
@@ -184,7 +184,7 @@ def process_2016_C01(treatment_path, grid_points):
 def process_2016_C02(treatment_path, grid_points):
     # CE strips
     ce_tx_2016 = geopandas.read_file(treatment_path)
-    ce_tx_2016.crs = {"init": "epsg:4326"}
+    ce_tx_2016.crs = "EPSG:4326"
 
     pointInPolys = sjoin(grid_points, ce_tx_2016, how="left")
 
@@ -203,17 +203,17 @@ def process_2017(treatment_path, grid_points):
     #ce_tx_2017.crs = {"init": "epsg:4326"}
 
     ce_tx_2017_utm_11n = geopandas.read_file(treatment_path)
-    ce_tx_2017_utm_11n.crs = {"init": "epsg:26911"}
+    ce_tx_2017_utm_11n.crs = "EPSG:26911"
 
     ce_tx_2017 = (ce_tx_2017_utm_11n
-        .to_crs({"init": "epsg:4326"}))
+        .to_crs("EPSG:4326"))
 
     pointInPolys = sjoin(grid_points, ce_tx_2017, how="left")
 
     #ce_2017["PlotId"] = ce_2017["Zone"].apply(lambda x: "HighFertRate" if x == 1 else "LowFertRate")
     
     ce_2017 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone" if x == 1 else "CE_LowFertZone"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2017" if x == 1 else "CE_LowFertZone2017"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2017)
             .assign(EndYear = 2017)
@@ -225,7 +225,7 @@ def process_2018(treatment_path, grid_points):
     # Crop was garbs, so no fert zones this year
 
     ce_2018 = (grid_points
-            .assign(PlotId = "CE_NoFertZone")
+            .assign(PlotId = "CE")
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2018)
             .assign(EndYear = 2018)
@@ -235,15 +235,15 @@ def process_2018(treatment_path, grid_points):
 
 def process_2019(treatment_path, grid_points):
     ce_tx_2019_utm_11n = geopandas.read_file(treatment_path)
-    ce_tx_2019_utm_11n.crs = {"init": "epsg:26911"}
+    ce_tx_2019_utm_11n.crs = "EPSG:26911"
 
     ce_tx_2019 = (ce_tx_2019_utm_11n
-        .to_crs({"init": "epsg:4326"}))
+        .to_crs("EPSG:4326"))
 
     pointInPolys = sjoin(grid_points, ce_tx_2019, how="left")
     
     ce_2019 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone" if x == 1 else "CE_LowFertZone"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2019" if x == 1 else "CE_LowFertZone2019"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2019)
             .assign(EndYear = 2019)
@@ -254,13 +254,13 @@ def process_2019(treatment_path, grid_points):
 def process_2020(treatment_path, grid_points):
     # CE strips    
     ce_tx_2020 = geopandas.read_file(treatment_path)
-    ce_tx_2020.crs = {"init": "epsg:4326"}
+    ce_tx_2020.crs = "EPSG:4326"
     
     pointInPolys = sjoin(grid_points, ce_tx_2020, how="left")
 
     # Meaning of fert zone values were swapped in 2020
     ce_2020 = (pointInPolys
-            .assign(PlotId = pointInPolys["Id"].apply(lambda x: "CE_LowFertZone" if x == 1 else "CE_HighFertZone"))
+            .assign(PlotId = pointInPolys["Id"].apply(lambda x: "CE_LowFertZone2020" if x == 1 else "CE_HighFertZone2020"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2020)
             .assign(EndYear = 2020)
@@ -271,12 +271,12 @@ def process_2020(treatment_path, grid_points):
 def process_2021(treatment_path, grid_points):
     # CE strips    
     ce_tx_2021 = geopandas.read_file(treatment_path)
-    ce_tx_2021.crs = {"init": "epsg:4326"}
+    ce_tx_2021.crs = "EPSG:4326"
     
     pointInPolys = sjoin(grid_points, ce_tx_2021, how="left")
 
     ce_2021 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone" if x == 1 else "CE_LowFertZone"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2021" if x == 1 else "CE_LowFertZone2021"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2021)
             .assign(EndYear = 2021)
@@ -287,12 +287,12 @@ def process_2021(treatment_path, grid_points):
 def process_2022(treatment_path, grid_points):
     # CE strips    
     ce_tx_2022 = geopandas.read_file(treatment_path)
-    ce_tx_2022.crs = {"init": "epsg:4326"}
+    ce_tx_2022.crs = "EPSG:4326"
     
     pointInPolys = sjoin(grid_points, ce_tx_2022, how="left")
 
     ce_2022 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone" if x == 1 else "CE_LowFertZone"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2022" if x == 1 else "CE_LowFertZone2022"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2022)
             .assign(EndYear = 2022)
