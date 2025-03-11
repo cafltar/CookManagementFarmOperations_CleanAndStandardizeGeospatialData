@@ -84,10 +84,6 @@ def main():
         else:
             df_all = pd.concat([df_all, df], ignore_index=True)
 
-    # QC
-
-    #pd.DataFrame(df_all).to_csv("foo.csv", index = False)
-
     # Create data dictionaries
     data_dictionary_columns = ["FieldName", "Units", "Description", "DataType"]
 
