@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Scripts for creating standard GIS layers for CAF with intent to share on ArcGIS Online for public consumption (with metadata on NAL GeoData)
+Scripts for creating standard GIS layers for CAF.
 
 ## License
 
