@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Scripts for creating standard GIS layers for CAF.
+Scripts for creating standard GIS layers for Cook fields (Cook East, Cook West)
 
 ## License
 
