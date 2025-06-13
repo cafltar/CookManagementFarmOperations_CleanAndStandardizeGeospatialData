@@ -29,7 +29,10 @@ def main():
         "ce_treatment_path_2019": INPUT_PATH / "20250307_CookEastFertZonesFromDataStream" / "CE_WW_2zones2019" / "CE_WW_2zones2019.shp",
         "ce_treatment_path_2020": INPUT_PATH / "20250307_CookEastFertZonesFromDataStream" / "CE_C01_Fert_2zones2020_WGS84" / "CE_C01_Fert_2zones2020_WGS84.shp",
         "ce_treatment_path_2021": INPUT_PATH / "20250307_CookEastFertZonesFromDataStream" / "WSU_C01_Fert_2zones2021_WGS84" / "WSU_C01_Fert_2zones2021_WGS84.shp",
-        "ce_treatment_path_2022": INPUT_PATH / "20250307_CookEastFertZonesFromDataStream" / "WSU_C01_Fert_2zones2022_WGS84" / "WSU_C01_Fert_2zones2022_WGS84" / "WSU_C01_Fert_2zones2022_WGS84.shp"
+        "ce_treatment_path_2022": INPUT_PATH / "20250307_CookEastFertZonesFromDataStream" / "WSU_C01_Fert_2zones2022_WGS84" / "WSU_C01_Fert_2zones2022_WGS84" / "WSU_C01_Fert_2zones2022_WGS84.shp",
+        "ce_treatment_path_2023": "",  # No fert zones for 2023, crop was winter peas
+        # Fert zones used in 2024 were the same as in 2022
+        "ce_treatment_path_2024": INPUT_PATH / "20250307_CookEastFertZonesFromDataStream" / "WSU_C01_Fert_2zones2022_WGS84" / "WSU_C01_Fert_2zones2022_WGS84" / "WSU_C01_Fert_2zones2022_WGS84.shp"
     }
 
     # CE Gridpoints
@@ -75,6 +78,12 @@ def main():
             
         elif treatment_path == "ce_treatment_path_2022":
             df = process_2022(treatment_paths[treatment_path], ce_gp)
+
+        elif treatment_path == "ce_treatment_path_2023":
+            df = process_2023(treatment_paths[treatment_path], ce_gp)
+
+        elif treatment_path == "ce_treatment_path_2024":
+            df = process_2024(treatment_paths[treatment_path], ce_gp)
             
         if ("ce_treatment_path_2016" not in treatment_path) and (df.shape[0] != 369):
             raise Exception("Incorrect number of rows")
@@ -121,11 +130,11 @@ def main():
     OUT_PATH.mkdir(parents = True, exist_ok = True)
 
     pd.DataFrame(df_all).sort_values(by = ["ID2", "StartYear"]).to_csv(
-        Path(OUT_PATH / "georeferencepoint_treatments_cookeast_1999-2022_{}.csv".format(date)),
+        Path(OUT_PATH / "georeferencepoint_treatments_cookeast_1999-2024_{}.csv".format(date)),
         index = False)
 
     georef_treatment_data_dictionary.to_csv(
-        Path(OUT_PATH / "georeferencepoint_treatments_cookeast_1999-2022_Dictionary_{}.csv".format(date)),
+        Path(OUT_PATH / "georeferencepoint_treatments_cookeast_1999-2024_Dictionary_{}.csv".format(date)),
         index = False)
     
 def process_1999To2015(treatment_path, grid_points):
@@ -169,8 +178,8 @@ def process_2016_C01(treatment_path, grid_points):
     pointInPolys = sjoin(grid_points, ce_tx_2016, how="left")
 
     ce_2016 = (pointInPolys[pointInPolys["Description"] == "0"]
-            .assign(PlotId = "C01")
-            .assign(TreatmentId = "C01")
+            .assign(PlotId = "C01_2016")
+            .assign(TreatmentId = "C01_2016")
             .assign(StartYear = 2016)
             .assign(EndYear = 2016)
             .drop(["geometry", "STRIP", "FIELD", "index_right", "Description"], axis = 1))
@@ -185,8 +194,8 @@ def process_2016_C02(treatment_path, grid_points):
     pointInPolys = sjoin(grid_points, ce_tx_2016, how="left")
 
     ce_2016 = (pointInPolys[pointInPolys["Description"] == "0"]
-            .assign(PlotId = "C02")
-            .assign(TreatmentId = "C02")
+            .assign(PlotId = "C02_2016")
+            .assign(TreatmentId = "C02_2016")
             .assign(StartYear = 2016)
             .assign(EndYear = 2016)
             .drop(["geometry", "STRIP", "FIELD", "index_right", "Description"], axis = 1))
@@ -209,7 +218,7 @@ def process_2017(treatment_path, grid_points):
     #ce_2017["PlotId"] = ce_2017["Zone"].apply(lambda x: "HighFertRate" if x == 1 else "LowFertRate")
     
     ce_2017 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2017" if x == 1 else "CE_LowFertZone2017"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2017" if x == 1 else "CE_LowFertZone_2017"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2017)
             .assign(EndYear = 2017)
@@ -239,7 +248,7 @@ def process_2019(treatment_path, grid_points):
     pointInPolys = sjoin(grid_points, ce_tx_2019, how="left")
     
     ce_2019 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2019" if x == 1 else "CE_LowFertZone2019"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2019" if x == 1 else "CE_LowFertZone_2019"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2019)
             .assign(EndYear = 2019)
@@ -256,7 +265,7 @@ def process_2020(treatment_path, grid_points):
 
     # Meaning of fert zone values were swapped in 2020
     ce_2020 = (pointInPolys
-            .assign(PlotId = pointInPolys["Id"].apply(lambda x: "CE_LowFertZone2020" if x == 1 else "CE_HighFertZone2020"))
+            .assign(PlotId = pointInPolys["Id"].apply(lambda x: "CE_LowFertZone_2020" if x == 1 else "CE_HighFertZone_2020"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2020)
             .assign(EndYear = 2020)
@@ -272,7 +281,7 @@ def process_2021(treatment_path, grid_points):
     pointInPolys = sjoin(grid_points, ce_tx_2021, how="left")
 
     ce_2021 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2021" if x == 1 else "CE_LowFertZone2021"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2021" if x == 1 else "CE_LowFertZone_2021"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2021)
             .assign(EndYear = 2021)
@@ -288,13 +297,42 @@ def process_2022(treatment_path, grid_points):
     pointInPolys = sjoin(grid_points, ce_tx_2022, how="left")
 
     ce_2022 = (pointInPolys
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone2022" if x == 1 else "CE_LowFertZone2022"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2022" if x == 1 else "CE_LowFertZone_2022"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2022)
             .assign(EndYear = 2022)
             .drop(["geometry", "STRIP", "FIELD", "index_right", "OBJECTID", "Id", "Id_1", "Zone", "Rate"], axis = 1))
     
     return pd.DataFrame(ce_2022)
+
+def process_2023(treatment_path, grid_points):   
+    # Crop was winter peas, so no fert zones this year
+
+    ce_2023 = (grid_points
+            .assign(PlotId = "CE")
+            .assign(TreatmentId = "ASP")
+            .assign(StartYear = 2023)
+            .assign(EndYear = 2023)
+            .drop(["geometry", "STRIP", "FIELD"], axis = 1))
+    
+    return pd.DataFrame(ce_2023)
+
+def process_2024(treatment_path, grid_points):
+    # CE strips    
+    ce_tx_2024 = geopandas.read_file(treatment_path)
+    ce_tx_2024.crs = "EPSG:4326"
+    
+    pointInPolys = sjoin(grid_points, ce_tx_2024, how="left")
+
+    ce_2024 = (pointInPolys
+            # NOTE: Using fert zones from 2022 because they were used again in 2024
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2024" if x == 1 else "CE_LowFertZone_2024"))
+            .assign(TreatmentId = "ASP")
+            .assign(StartYear = 2024)
+            .assign(EndYear = 2024)
+            .drop(["geometry", "STRIP", "FIELD", "index_right", "OBJECTID", "Id", "Id_1", "Zone", "Rate"], axis = 1))
+    
+    return pd.DataFrame(ce_2024)
 
 if __name__ == "__main__":
     main()
