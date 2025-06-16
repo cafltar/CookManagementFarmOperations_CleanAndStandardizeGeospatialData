@@ -93,6 +93,14 @@ def main():
         else:
             df_all = pd.concat([df_all, df], ignore_index=True)
 
+    # Assign points in CE (1998 to current)
+    df_ce_all = process_cookeast_1998_to_current(ce_boundary_path, ce_gp, 2024)
+    if df_all.empty:
+            df_all = df
+    else:
+        df_all = pd.concat([df_all, df_ce_all], ignore_index=True)
+
+
     # Create data dictionaries
     data_dictionary_columns = ["FieldName", "Units", "Description", "DataType"]
 
@@ -333,6 +341,22 @@ def process_2024(treatment_path, grid_points):
             .drop(["geometry", "STRIP", "FIELD", "index_right", "OBJECTID", "Id", "Id_1", "Zone", "Rate"], axis = 1))
     
     return pd.DataFrame(ce_2024)
+
+def process_cookeast_1998_to_current(treatment_path, grid_points, end_year):
+    ce_boundary_utm = geopandas.read_file(treatment_path)
+    ce_boundary_utm.crs = '26911'
+    ce_boundary = ce_boundary_utm.to_crs('4326')
+
+    pointsInPolys = sjoin(grid_points, ce_boundary, how="left")
+
+    ce = (pointsInPolys
+        .assign(PlotId = "CE")
+        .assign(TreatmentId = "ASP")
+        .assign(StartYear = 1998)
+        .assign(EndYear = end_year)
+        .drop(["geometry", "STRIP", "FIELD", "index_right", "Id", "Area", "Perimeter", "Acres", "Hectares"], axis = 1))
+    
+    return pd.DataFrame(ce)
 
 if __name__ == "__main__":
     main()
