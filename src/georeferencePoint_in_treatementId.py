@@ -169,7 +169,7 @@ def process_1999To2015(treatment_path, grid_points):
         .assign(PlotId = pointInPolys["Field"].astype(str) + pointInPolys["Strip"].astype(str))
         .assign(TreatmentId = pointInPolys["Field"].astype(str) + pointInPolys["Strip"].astype(str))
         .assign(StartYear = 1999)
-        .assign(EndYear = 2015)
+        .assign(EndYear = 2016) # Including 2016 since HY2016 crops used old field+strip designations in 2015
         .drop(["geometry", "STRIP", "FIELD", "index_right", "Strip", "Field"], axis = 1))
 
     # Reassign TreatmentIds at Field C; some treatments in Field C were split between two strips due to smaller area of the strips relative to those in Field A and Field B
