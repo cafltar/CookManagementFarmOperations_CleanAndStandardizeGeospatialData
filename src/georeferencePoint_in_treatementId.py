@@ -334,7 +334,7 @@ def process_2024(treatment_path, grid_points):
 
     ce_2024 = (pointInPolys
             # NOTE: Using fert zones from 2022 because they were used again in 2024
-            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2024" if x == 1 else "CE_LowFertZone_2024"))
+            .assign(PlotId = pointInPolys["Zone"].apply(lambda x: "CE_HighFertZone_2022" if x == 1 else "CE_LowFertZone_2022"))
             .assign(TreatmentId = "ASP")
             .assign(StartYear = 2024)
             .assign(EndYear = 2024)
